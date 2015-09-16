@@ -1,0 +1,48 @@
+<openerp>
+    <data>
+        <template id="website_calendar" name="Website Calendar">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <t t-raw="0" />
+                    <div class="oe_structure oe_empty" />
+                    <section class="jumbotron mt16 mb16">
+                        <div class="container">
+                            <h1 class="text-center">Calendar</h1>
+                            <table class="table table-bordered table-responsive">
+                                <t t-set="week_days" t-value="request.env['booking.booking'].now_week()"/>
+                                <!--<t t-set="booking" t-value="request.env['calendar.event'].search([('name','=','Presentation for new Services')])"/>-->
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="7"><h2>Vecka: <t t-esc="week_days[0].isocalendar()[1]"/></h2>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center">
+                                        <t t-foreach="week_days" t-as="d">
+                                            <td class="text-center"><h3 style="color: #888;" t-esc="d.strftime('%a')"/><br/>
+                                                <h1 t-esc="d.strftime('%d')"/><br/>
+                                                <h3 style="color: #444;" t-esc="d.strftime('%b')"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+
+                                    <tr class="text-center">
+                                        <t t-foreach="week_days" t-as="d">
+                                            <td>
+                                                <t t-foreach="product.get_free_spots(d)" t-as="spot">
+                                                    <a t-att-href="spot.url"><span t-field="spot.name"/></a><br/>
+                                                </t>
+                                                <span t-esc="request.env['booking.temp'].search([])[0].get_employee_calendar()"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+    </data>
+</openerp>
