@@ -12,6 +12,24 @@ class Booking(models.Model):
     _name = 'booking.booking'
 
     # bookings = fields.One2many(compute='booking')
+    
+    @api.models
+    def _url(self):
+        self.url = "/booking/%s" % "something"
+    url = fields.Char(string="Url",compute=_url)
+    @api.models
+    def _name(self):
+        self.name = 'Some good name'
+    name = fields.Char(string="Name",compute=_name)
+    date_start = fields.DateTime(string='Start')
+    date_end   = fields.DateTime(string='End')
+    # employee_id
+    # partner_id  
+    # product_id
+    # company_id = 
+    # status  selection = draft,open,canceled,done
+    # descriptin ?
+    # ärv in maillogg
 
     @api.model
     def now_week(self):
@@ -67,10 +85,15 @@ class product_product(models.Model):
         employee_id = self.env['hr.employee'].search([])[0]
 
         spot = self.env['product.spot_time']
+        spot.select([('date_start','>=',start_dt),('date_start','<',start_dt.timedelta(days=1))]).unlink()
         for contact in employee_id.contract_ids:
             for interval in contact.working_hours.get_working_intervals_of_day(self._cr, self._uid, contact.working_hours.id, start_dt):
-                spot.create({'url': 'hejsan', 'name': 'name','date_start': interval[0], 'date_end': interval[0].timedelta(minutes=self.duration)})
-
+                i = interval[0]
+                while(i.timedelta(minutes=self.duration) <= interval[1]):
+                    # check if spot or booking exists 
+                    spot.create({'url': 'hejsan', 'name': 'name','date_start': i, 'date_end': i.timedelta(minutes=self.duration)})
+                    i += i.timedelta(minutes=self.duration)
+        raise Exception("The record has been deleted or not")
         return [spot.select([('date_start','>=',start_dt),('date_start','<',start_dt.timedelta(days=1))])]
 
     # def get_free_spots(self, product=False, calendar=False):
