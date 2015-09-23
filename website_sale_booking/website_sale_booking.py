@@ -64,17 +64,29 @@ class product_product(models.Model):
 
     def get_free_spots(self, start_dt, product=False, calendar=False):
         _logger.warning('<<<<<<<<<<<freeeeeee>>>>>>>>>>>: %s' % start_dt.replace(hour=8, minute=8, second=8))
-        employee_id = self.env['hr.employee'].search([('name', '=', 'Gilles Gravie')])[0]
+        employee_id = self.env['hr.employee'].search([])[0]
 
+        spot = self.env['product.spot_time']
         for contact in employee_id.contract_ids:
             for interval in contact.working_hours.get_working_intervals_of_day(self._cr, self._uid, contact.working_hours.id, start_dt):
-                spot = (interval[0], interval[0].timedelta(minutes=self.duration))
+                spot.create({'url': 'hejsan', 'name': 'name','date_start': interval[0], 'date_end': interval[0].timedelta(minutes=self.duration)})
 
-        return [spot]
+        return [spot.select([('date_start','>=',start_dt),('date_start','<',start_dt.timedelta(days=1))])]
 
     # def get_free_spots(self, product=False, calendar=False):
     #     return [('url', 'string'), ('url', 'string')]
 
+
+#~ class product_spot_time(models.TransientModel):
+    #~ _name = "product.spot_time"
+    #~ 
+    #~ url = fields.Char(string="Url")
+    #~ name = fields.Char(string="Name")
+    #~ date_start = fields.DateTime(string='Start')
+    #~ date_end   = fields.DateTime(string='End')
+    #~ 
+    #~ 
+    
 
 class BookingController(http.Controller):
     @http.route(['/booking/<string:year>/<string:week>', ], type='http', auth="public", website=True)
