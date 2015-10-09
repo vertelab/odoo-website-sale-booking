@@ -29,7 +29,7 @@ class Booking(models.Model):
     # company_id = 
     # status  selection = draft,open,canceled,done
     # descriptin ?
-    # ärv in maillogg
+    # arv in maillogg
 
     @api.model
     def now_week(self):
