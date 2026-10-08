@@ -13,7 +13,7 @@ OpenERP Website Booking System view.
     'css': [
 
     ],
-    'author': 'Vertel AB',
+    'author': 'Vertel Sverige AB',
     'website': 'http://www.vertel.se',
     'depends': ['website', 'product', 'hr_contract', 'resource'],
     'data': ['view/website_sale_booking.xml'],

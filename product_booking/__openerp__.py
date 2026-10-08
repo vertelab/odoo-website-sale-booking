@@ -13,7 +13,7 @@ Product Booking System view.
     'css': [
 
     ],
-    'author': 'Vertel AB',
+    'author': 'Vertel Sverige AB',
     'website': 'http://www.vertel.se',
     'depends': ['product', 'calendar','resource','hr'],
     'data': ['product_booking.xml'],
